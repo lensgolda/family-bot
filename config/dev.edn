@@ -1,0 +1,34 @@
+{:services.scheduling/rates {:provider #ig/ref :providers.rates/open-er-api-com
+                             :messaging #ig/ref :services.messaging/telegram
+                             :schedule #profile {:dev {:in [2 :seconds]
+                                                       :every [10 :seconds]
+                                                       :limit 1}
+                                                 :prod {:every :day
+                                                        :at [9 :hours 10 :minutes 0 :seconds]}}}
+ :services.scheduling/weather {:provider #ig/ref :providers.weather/weather-api-com
+                               :schedule #profile {:dev {:in [2 :seconds]
+                                                         :every [10 :seconds]
+                                                         :limit 1}
+                                                   :prod {:every :day
+                                                          :at [9 :hours 10 :minutes 0 :seconds]}}}
+ :services.messaging/telegram {:token #env TELEGRAM_TOKEN
+                               :chat-id "-360270546"
+                               :base-url "https://api.telegram.org"}
+ :providers.rates/open-er-api-com {:base-url "https://open.er-api.com/v6/latest"
+                                   :currencies #{"EUR" "USD"}}
+ :providers.rates/cbrf {:base-url "http://www.cbr.ru/scripts/XML_daily.asp"
+                        :currencies #{"EUR" "USD"}}
+ :providers.weather/weather-api-com {:key #env WEATHER_API_KEY
+                                     :base-url "http://api.weatherapi.com/v1/forecast.json?q=Kaliningrad&aqi=no"}
+ :providers.weather/accuweather {:key #env ACCUWEATHER_KEY
+                                 :base-url "http://dataservice.accuweather.com/forecasts/v1/daily"
+                                 :location-key "292922"}}
+
+;;  locationKey 292922 (Kaliningrad)
+;; curl request 5-days forecast
+;; curl -X GET "http://dataservice.accuweather.com/forecasts/v1/daily/5day/{locationKey}?apikey={ACCUWEATHER_KEY}&metric=true"
+;; curl request 1-day forecast
+;; curl -X GET "http://dataservice.accuweather.com/forecasts/v1/daily/1day/{locationKey}?apikey={ACCUWEATHER_KEY}&metric=true"
+;;
+;; weatherapi
+;; http://api.weatherapi.com/v1/current.json?key={WEATHER_API_KEY}&q=Kaliningrad&aqi=no
