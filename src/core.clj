@@ -9,5 +9,5 @@
 
 (defn -main
   [& _]
-  (-> (aero/read-config "config/dev.edn" {:profile :prod})
+  (-> (aero/read-config "config/prod.edn" {:profile :prod})
       (ig/init)))

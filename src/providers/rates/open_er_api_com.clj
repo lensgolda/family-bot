@@ -3,7 +3,7 @@
             [integrant.core :as ig]
             [jsonista.core :as j]
             [services.messaging.telegram :as telegram]
-            [spec.common :as spec-common]))
+            [providers.spec :as providers-spec]))
 
 
 (defn- fetch-rate
@@ -42,7 +42,7 @@
 
 (defmethod ig/pre-init-spec :providers.rates/open-er-api-com
   []
-  ::spec-common/provider-rates)
+  ::providers-spec/rates-provider)
 
 (defmethod ig/init-key :providers.rates/open-er-api-com
   [_ config]

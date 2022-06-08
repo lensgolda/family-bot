@@ -3,3 +3,5 @@
 .env
 .nrepl-port
 *.iml
+/config/*.edn
+!/config/example.dev.edn

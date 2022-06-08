@@ -1,8 +1,7 @@
 (ns providers.weather.weather-api-com
   (:require [integrant.core :as ig]
             [jsonista.core :as j]
-            [clojure.spec.alpha :as s]))
-
+            [providers.spec :as providers-spec]))
 
 (defn- fetch-weather*
   [{:keys [base-url key]}]
@@ -19,7 +18,7 @@
 
 (defmethod ig/pre-init-spec :providers.weather/weather-api-com
   [_]
-  (s/keys :req-un [::key ::base-url]))
+  ::providers-spec/weather-api-provider-config)
 
 (defmethod ig/init-key :providers.weather/weather-api-com
   [_ config]

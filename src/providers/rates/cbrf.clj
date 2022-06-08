@@ -1,12 +1,11 @@
 (ns providers.rates.cbrf
   (:require [integrant.core :as ig]
-            #_[clojure.core.async :refer [go thread >! <! <!! >!! chan put! take!]]
             [clojure.java.io :as io]
             [clojure.xml :as xml]
             [clojure.zip :as zip]
             [clojure.data.zip.xml :refer :all]
             [services.messaging.telegram :as telegram]
-            [spec.common :as spec-common])
+            [providers.spec :as providers-spec])
   (:import (java.text DecimalFormat)))
 
 
@@ -69,7 +68,7 @@
 
 (defmethod ig/pre-init-spec :providers.rates/cbrf
   []
-  ::spec-common/provider-rates)
+  ::providers-spec/rates-provider)
 
 (defmethod ig/init-key :providers.rates/cbrf
   [_ config]

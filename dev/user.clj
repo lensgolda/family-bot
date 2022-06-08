@@ -11,17 +11,25 @@
 
 (defn load-config
   [profile]
-  (-> (aero/read-config "config/dev.edn" {:profile profile})
-      #_(ig/read-string)))
+  (aero/read-config "config/dev.edn" {:profile profile}))
 
 (comment
-
+  ;; require async
+  (require '[clojure.core.async :refer [go thread >! <! <!! >!! chan put! take!]])
+  ;; require other
+  (require '[org.httpkit.client :as http]
+           '[clojure.xml :as xml]
+           '[clojure.zip :as zip]
+           '[clojure.java.io :as io]
+           '[crouton.html :as crouton]
+           '[clojure.data.zip.xml :refer :all])
+  ;; prepare integrant
   (ig-repl/set-prep!
     (fn []
       (let [config (load-config :dev)]
         (ig/load-namespaces config [:services.scheduling/weather])
         (ig/prep config [:services.scheduling/weather]))))
-
+  ;; integrant repl
   (ig-repl/prep [:services.scheduling/weather])
   (ig-repl/init [:services.scheduling/weather])
   (ig-repl/go [:services.scheduling/weather])
@@ -30,19 +38,13 @@
   (ig-repl/clear)
   (ig-repl/load-namespaces config [:services.scheduling/weather])
 
-
-  (require '[org.httpkit.client :as http]
-           '[clojure.xml :as xml]
-           '[clojure.zip :as zip]
-           '[clojure.java.io :as io]
-           '[crouton.html :as crouton]
-           '[clojure.data.zip.xml :refer :all])
-
+  ;; try weather
   (-> (slurp "http://api.weatherapi.com/v1/current.json?key={WEATHER_API_KEY}&q=Kaliningrad&aqi=no&alerts=no")
       (jsonista.core/read-value jsonista.core/keyword-keys-object-mapper)
       :current
       (select-keys [:temp_c :humidity :condition :wind_kph :wind_dir :feels_like]))
 
+  ;; weatherapi.com current response
   (def wresponse
     {:current {:gust_mph 8.3,
                :last_updated_epoch 1654438500,
