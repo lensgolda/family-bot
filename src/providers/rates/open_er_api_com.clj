@@ -1,9 +1,9 @@
 (ns providers.rates.open-er-api-com
-  (:require [clojure.core.async :refer [go thread >! <! <!! >!! chan put! take!]]
+  (:require [clojure.core.async :refer [<!! thread]]
             [integrant.core :as ig]
             [jsonista.core :as j]
-            [services.messaging.telegram :as telegram]
-            [providers.spec :as providers-spec]))
+            [providers.spec :as providers-spec]
+            [services.messaging.telegram :as telegram]))
 
 
 (defn- fetch-rate
@@ -37,11 +37,11 @@
 (defrecord OpenErApiCom []
   providers.rates/RatesFetching
   (fetch-rates [this]
-    (some->> (fetch-rates* this)
-             (format-rates))))
+    (some-> (fetch-rates* this)
+            (format-rates))))
 
 (defmethod ig/pre-init-spec :providers.rates/open-er-api-com
-  []
+  [_]
   ::providers-spec/rates-provider)
 
 (defmethod ig/init-key :providers.rates/open-er-api-com

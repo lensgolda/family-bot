@@ -11,7 +11,7 @@
   [{<provider> :provider
     <msg> :messaging}]
   (some->> (weather/fetch-weather! <provider>)
-           #_(telegram/send-message! <msg>)))
+           (telegram/send-message! <msg>)))
 
 (defmethod ig/prep-key :services.scheduling/weather
   [_ config]

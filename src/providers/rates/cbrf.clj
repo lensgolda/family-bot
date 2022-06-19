@@ -1,11 +1,12 @@
 (ns providers.rates.cbrf
-  (:require [integrant.core :as ig]
+  (:require [clojure.data.zip.xml :refer :all]
             [clojure.java.io :as io]
             [clojure.xml :as xml]
             [clojure.zip :as zip]
-            [clojure.data.zip.xml :refer :all]
+            [integrant.core :as ig]
+            [providers.spec :as providers-spec]
             [services.messaging.telegram :as telegram]
-            [providers.spec :as providers-spec])
+            [clojure.tools.logging :as log])
   (:import (java.text DecimalFormat)))
 
 
@@ -44,8 +45,8 @@
                 v valutes
                 :when (and (seq valutes) (= c (:code v)))]
             v))))
-    (catch Exception _
-      nil)))
+    (catch Exception e
+      (log/error e "error fetching rates"))))
 
 (defn- rates-map->strings
   [rates]
@@ -63,11 +64,11 @@
 (defrecord Cbrf []
   providers.rates/RatesFetching
   (fetch-rates [this]
-    (some->> (fetch-rates* this)
-             (format-rates))))
+    (some-> (fetch-rates* this)
+            (format-rates))))
 
 (defmethod ig/pre-init-spec :providers.rates/cbrf
-  []
+  [_]
   ::providers-spec/rates-provider)
 
 (defmethod ig/init-key :providers.rates/cbrf

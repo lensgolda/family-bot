@@ -6,6 +6,7 @@
                                                  :prod {:every :day
                                                         :at [9 :hours 10 :minutes 0 :seconds]}}}
  :services.scheduling/weather {:provider #ig/ref :providers.weather/weather-api-com
+                               :messaging #ig/ref :services.messaging/telegram
                                :schedule #profile {:dev {:in [2 :seconds]
                                                          :every [10 :seconds]
                                                          :limit 1}

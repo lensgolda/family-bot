@@ -1,7 +1,8 @@
 (ns services.messaging.telegram
   (:require [integrant.core :as ig]
             [org.httpkit.client :as http]
-            [jsonista.core :as j]))
+            [jsonista.core :as j]
+            [clojure.tools.logging :as log]))
 
 (def ^:private METHOD-SEND-MESSAGE "sendMessage")
 
@@ -30,10 +31,11 @@
                    :headers {"Content-Type" "application/json"
                              "Accept" "application/json"}}]
       (http/request request
-                    (fn [{:keys [status _headers _body error]}] ;; asynchronous response handling
+                    (fn [{:keys [status _headers body error]}] ;; asynchronous response handling
                       (if error
-                        (println "Failed, exception is " error)
-                        (println "Async HTTP GET: " status)))))))
+                        (log/error "telegram sending message failed: " error)
+                        (log/info "telegram sending status: " status
+                                  ", message-id: " (get-in body ["result" "message_id"]))))))))
 
 (defn send-message!
   [<messaging> message]
