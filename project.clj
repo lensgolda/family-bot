@@ -27,7 +27,7 @@
              :dev {:resource-paths ["dev" "resources"]
                    :dependencies [[integrant/repl "0.3.2"]]}
              ;; activated automatically during uberjar
-             :uberjar {:aot [family.bot.core]}}
+             :uberjar {:uberjar {:main family.bot.core, :aot :all}}}
   ;; These settings disable the implicit loading of middleware and
   ;; hooks, respectively. You can disable both with :implicits false.
   :implicit-middleware false
