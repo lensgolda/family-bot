@@ -1,7 +1,7 @@
-(ns providers.weather.weather-api-com
+(ns family.bot.providers.weather.weather-api-com
   (:require [integrant.core :as ig]
             [jsonista.core :as j]
-            [providers.spec :as providers-spec]
+            [family.bot.providers.spec :as providers-spec]
             [clojure.tools.logging :as log]))
 
 (def ^:private i18map->format
@@ -56,15 +56,15 @@
   (some-> weather :current format-current))
 
 (defrecord WeatherApiCom []
-  providers.weather/WeatherFetching
+  family.bot.providers.weather/WeatherFetching
   (fetch-weather [this]
     (some-> (fetch-weather* this)
             (format-weather))))
 
-(defmethod ig/pre-init-spec :providers.weather/weather-api-com
+(defmethod ig/pre-init-spec :family.bot.providers.weather/weather-api-com
   [_]
   ::providers-spec/weather-api-provider-config)
 
-(defmethod ig/init-key :providers.weather/weather-api-com
+(defmethod ig/init-key :family.bot.providers.weather/weather-api-com
   [_ config]
   (map->WeatherApiCom config))

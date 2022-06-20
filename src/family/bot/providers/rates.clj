@@ -1,4 +1,4 @@
-(ns providers.rates)
+(ns family.bot.providers.rates)
 
 (defprotocol RatesFetching
   (fetch-rates [this]))

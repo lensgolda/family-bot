@@ -6,3 +6,7 @@
 /config/*.edn
 !/config/example.dev.
 /target
+/out
+/pom.xml
+/.lein-*
+/.env

@@ -31,12 +31,12 @@
   (ig-repl/set-prep!
     (fn []
       (let [config (load-config :dev)]
-        (ig/load-namespaces config [:services.scheduling/weather])
-        (ig/prep config [:services.scheduling/weather]))))
+        (ig/load-namespaces config [:family.bot.services.scheduling/weather])
+        (ig/prep config [:family.bot.services.scheduling/weather]))))
   ;; integrant repl
-  (ig-repl/prep [:services.scheduling/weather])
-  (ig-repl/init [:services.scheduling/weather])
-  (ig-repl/go [:services.scheduling/weather])
+  (ig-repl/prep [:family.bot.services.scheduling/weather])
+  (ig-repl/init [:family.bot.services.scheduling/weather])
+  (ig-repl/go [:family.bot.services.scheduling/weather])
   (ig-repl/halt)
   (ig-repl/reset)
   (ig-repl/clear)

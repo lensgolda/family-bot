@@ -1,12 +1,13 @@
-(ns providers.rates.cbrf
+(ns family.bot.providers.rates.cbrf
   (:require [clojure.data.zip.xml :refer :all]
             [clojure.java.io :as io]
             [clojure.xml :as xml]
             [clojure.zip :as zip]
             [integrant.core :as ig]
-            [providers.spec :as providers-spec]
-            [services.messaging.telegram :as telegram]
-            [clojure.tools.logging :as log])
+            [clojure.tools.logging :as log]
+            [family.bot
+             [providers.spec :as providers-spec]
+             [services.messaging.telegram :as telegram]])
   (:import (java.text DecimalFormat)))
 
 
@@ -62,15 +63,15 @@
        (apply str "*Курсы валют*\n")))
 
 (defrecord Cbrf []
-  providers.rates/RatesFetching
+  family.bot.providers.rates/RatesFetching
   (fetch-rates [this]
     (some-> (fetch-rates* this)
             (format-rates))))
 
-(defmethod ig/pre-init-spec :providers.rates/cbrf
+(defmethod ig/pre-init-spec :family.bot.providers.rates/cbrf
   [_]
   ::providers-spec/rates-provider)
 
-(defmethod ig/init-key :providers.rates/cbrf
+(defmethod ig/init-key :family.bot.providers.rates/cbrf
   [_ config]
   (map->Cbrf config))

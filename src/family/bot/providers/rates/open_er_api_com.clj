@@ -1,9 +1,10 @@
-(ns providers.rates.open-er-api-com
+(ns family.bot.providers.rates.open-er-api-com
   (:require [clojure.core.async :refer [<!! thread]]
             [integrant.core :as ig]
             [jsonista.core :as j]
-            [providers.spec :as providers-spec]
-            [services.messaging.telegram :as telegram]))
+            [family.bot
+             [providers.spec :as providers-spec]
+             [services.messaging.telegram :as telegram]]))
 
 
 (defn- fetch-rate
@@ -35,15 +36,15 @@
        (apply str "*Курсы валют*\n")))
 
 (defrecord OpenErApiCom []
-  providers.rates/RatesFetching
+  family.bot.providers.rates/RatesFetching
   (fetch-rates [this]
     (some-> (fetch-rates* this)
             (format-rates))))
 
-(defmethod ig/pre-init-spec :providers.rates/open-er-api-com
+(defmethod ig/pre-init-spec :family.bot.providers.rates/open-er-api-com
   [_]
   ::providers-spec/rates-provider)
 
-(defmethod ig/init-key :providers.rates/open-er-api-com
+(defmethod ig/init-key :family.bot.providers.rates/open-er-api-com
   [_ config]
   (map->OpenErApiCom config))

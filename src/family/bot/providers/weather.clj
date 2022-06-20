@@ -1,4 +1,4 @@
-(ns providers.weather)
+(ns family.bot.providers.weather)
 
 (defprotocol WeatherFetching
   (fetch-weather [this]))

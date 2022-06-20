@@ -1,6 +1,6 @@
-(ns providers.spec
+(ns family.bot.providers.spec
   (:require [clojure.spec.alpha :as s]
-            [spec.common :as spec-common]))
+            [family.bot.spec.common :as spec-common]))
 
 ;; basic spec forms
 (s/def ::base-url ::spec-common/url)

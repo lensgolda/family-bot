@@ -1,4 +1,4 @@
-(ns services.messaging.telegram
+(ns family.bot.services.messaging.telegram
   (:require [integrant.core :as ig]
             [org.httpkit.client :as http]
             [jsonista.core :as j]
@@ -41,6 +41,6 @@
   [<messaging> message]
   (send-message <messaging> message))
 
-(defmethod ig/init-key :services.messaging/telegram
+(defmethod ig/init-key :family.bot.services.messaging/telegram
   [_ config]
   (map->Telegram config))

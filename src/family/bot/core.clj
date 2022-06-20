@@ -1,4 +1,4 @@
-(ns core
+(ns family.bot.core
   (:require [integrant.core :as ig]
             [aero.core :as aero])
   (:gen-class))
@@ -10,4 +10,4 @@
 (defn -main
   [& _]
   (-> (aero/read-config "config/prod.edn" {:profile :prod})
-      (ig/init [:services.scheduling/rates :services.scheduling/weather])))
+      (ig/init [:family.bot.services.scheduling/rates :family.bot.services.scheduling/weather])))
