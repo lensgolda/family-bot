@@ -5,6 +5,7 @@
 *.iml
 /config/*.edn
 !/config/example.dev.
+!/config/prod.edn
 /target
 /out
 /pom.xml
