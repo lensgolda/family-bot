@@ -6,13 +6,13 @@
             [clojure.string :as str]))
 
 (def ^:private i18map->format
-  {:temp_c "температура: %.1fº\n"
+  {:temp_c "температура: %.1f\u2103\n"
    :wind_kph "ветер %.1f км/ч"
    :wind_dir ", %s\n"
-   :humidity "влажность %d%%\n"
-   :feelslike_c "ощущается как %.1fº\n"
-   :precip_mm "осадки %.1fмм\n"
-   :cloud "облачность %d%%\n"})
+   :humidity "влажность %d\u0025\n"
+   :feelslike_c "ощущается как %.1f\u2103\n"
+   :precip_mm "осадки %.1f мм\n"
+   :cloud "облачность %d\u0025\n"})
 
 (defn- raw->tidy
   [raw]
@@ -51,8 +51,7 @@
   [current]
   (as-> current $
     (current-map->strings $)
-    (apply str "*Погода сейчас*:\n" $)
-    (str/replace #"\." "\\\\." $)))
+    (apply str "*Погода сейчас*:\n" $)))
 
 (defn- format-weather
   [weather]

@@ -29,10 +29,12 @@
                       {:code (xml1-> v (tag= :CharCode) text)
                        :value (xml1-> v (tag= :Value) text)
                        :name (xml1-> v (tag= :Name) text)})
-        decimal-format (DecimalFormatSymbols/getInstance
-                         (Locale/forLanguageTag "ru-RU"))
-        parse-decimal #(.parse (DecimalFormat. "0.#" decimal-format) %)
+        df (DecimalFormat.)
+        parse-decimal #(.parse df %)
         value->decimal #(update % :value parse-decimal)]
+    (doto (.getDecimalFormatSymbols df)
+      (.setDecimalSeparator (char \,))
+      (.setMonetaryDecimalSeparator (char \,)))
     (->> zipper
          iter-zip
          (filter valute?)
@@ -58,14 +60,13 @@
         :let [k1 (-> r :code keyword)
               k2 (keyword "RUB")
               v (:value r)]]
-    (format "\uD83D\uDCB1 %s\t%.2f\t%s\n" (telegram/emoji k1) v (telegram/emoji k2))))
+    (format "\uD83D\uDCB1 %s %.2f %s\n" (telegram/emoji k1) v (telegram/emoji k2))))
 
 (defn- format-rates
   [rates]
   (as-> rates $
     (rates-map->strings $)
-    (apply str "*Курсы валют*\n" $)
-    (str/replace $ #"\." "\\\\.")))
+    (apply str "*Курсы валют*\n" $)))
 
 (defrecord Cbrf []
   family.bot.providers.rates/RatesFetching
