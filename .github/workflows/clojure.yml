@@ -1,0 +1,34 @@
+name: Clojure CI
+
+on:
+  push:
+    branches: [ "actions" ]
+  pull_request:
+    branches: [ "actions" ]
+
+jobs:
+  clojure:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Setup JDK temurin 17
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+    - name: Setup clojure
+      uses: DeLaGuardo/setup-clojure@7.0
+      with:
+        cli: latest
+    - name: Check CLI tools
+      run: clj --version
+    - name: Install dependencies
+      run: clj -P
+    - name: Clean target
+      run: clj -T:build clean
+    - name: Build uberjar
+      run: clj -T:build uber
+    - run: java -jar target/family-bot-standalone.jar clojure.main -m family.bot.core dev
