@@ -2,7 +2,8 @@
   (:require [integrant.core :as ig]
             [jsonista.core :as j]
             [family.bot.providers.spec :as providers-spec]
-            [clojure.tools.logging :as log]))
+            [clojure.tools.logging :as log]
+            [clojure.string :as str]))
 
 (def ^:private i18map->format
   {:temp_c "температура: %.1fº\n"
@@ -48,8 +49,10 @@
 
 (defn- format-current
   [current]
-  (->> (current-map->strings current)
-       (apply str "*Погода сейчас*:\n")))
+  (as-> current $
+    (current-map->strings $)
+    (apply str "*Погода сейчас*:\n" $)
+    (str/replace #"\." "\\\\." $)))
 
 (defn- format-weather
   [weather]

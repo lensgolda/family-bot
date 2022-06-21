@@ -6,7 +6,8 @@
             [integrant.core :as ig]
             [clojure.tools.logging :as log]
             [family.bot.providers.spec :as providers-spec]
-            [family.bot.services.messaging.telegram :as telegram])
+            [family.bot.services.messaging.telegram :as telegram]
+            [clojure.string :as str])
   (:import (java.text DecimalFormat DecimalFormatSymbols)
            (java.util Locale)))
 
@@ -61,8 +62,10 @@
 
 (defn- format-rates
   [rates]
-  (->> (rates-map->strings rates)
-       (apply str "*Курсы валют*\n")))
+  (as-> rates $
+    (rates-map->strings $)
+    (apply str "*Курсы валют*\n" $)
+    (str/replace $ #"\." "\\\\.")))
 
 (defrecord Cbrf []
   family.bot.providers.rates/RatesFetching
