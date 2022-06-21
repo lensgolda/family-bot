@@ -18,7 +18,7 @@
  :family.bot.providers.rates/open-er-api-com   {:base-url   "https://open.er-api.com/v6/latest"
                                                 :currencies #{"EUR" "USD"}}
  :family.bot.providers.weather/weather-api-com {:key      #env WEATHER_API_KEY
-                                                :base-url "http://api.weatherapi.com/v1/forecast.json?q=Tenerife&aqi=no"}
+                                                :base-url "http://api.weatherapi.com/v1/forecast.json?q=Reykjavik&aqi=no"}
  :family.bot.providers.weather/accuweather     {:key          #env ACCUWEATHER_KEY
                                                 :base-url     "http://dataservice.accuweather.com/forecasts/v1/daily"
                                                 :location-key #env ACCUWEATHER_LOCATION}}

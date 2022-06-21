@@ -1,1 +1,1 @@
-web: java $JVM_OPTS -cp target/family-bot-standalone.jar clojure.main -m family.bot.core
+web: java $JVM_OPTS -cp target/family-bot-standalone.jar clojure.main -m family.bot.core prod

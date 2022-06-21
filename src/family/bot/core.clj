@@ -5,7 +5,7 @@
             [clojure.tools.logging :as log])
   (:gen-class))
 
-(defmethod aero/reader (symbol "ig/ref")
+(defmethod aero/reader 'ig/ref
   [_ _ value]
   (ig/ref value))
 
@@ -17,8 +17,8 @@
                         str/lower-case
                         keyword
                         (or :prod))
-        config (aero/read-config "config/prod.edn" {:profile profile})]
-    (ig/init
-      config
-      [:family.bot.services.scheduling/rates
-       :family.bot.services.scheduling/weather])))
+        config (aero/read-config "config/example.dev.edn" {:profile profile})]
+    (ig/load-namespaces config
+      [:family.bot.services.scheduling/rates :family.bot.services.scheduling/weather])
+    (ig/init config
+      [:family.bot.services.scheduling/rates :family.bot.services.scheduling/weather])))

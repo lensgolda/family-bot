@@ -34,8 +34,7 @@
                     (fn [{:keys [status _headers body error]}] ;; asynchronous response handling
                       (if error
                         (log/error "telegram sending message failed: " error)
-                        (log/info "telegram sending status: " status
-                                  ", message-id: " (get-in body ["result" "message_id"]))))))))
+                        (log/info "telegram sending status " status body)))))))
 
 (defn send-message!
   [<messaging> message]
