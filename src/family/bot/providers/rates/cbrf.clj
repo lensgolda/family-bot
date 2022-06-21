@@ -7,7 +7,8 @@
             [clojure.tools.logging :as log]
             [family.bot.providers.spec :as providers-spec]
             [family.bot.services.messaging.telegram :as telegram])
-  (:import (java.text DecimalFormat)))
+  (:import (java.text DecimalFormat DecimalFormatSymbols)
+           (java.util Locale)))
 
 
 (defn- iter-zip
@@ -27,7 +28,9 @@
                       {:code (xml1-> v (tag= :CharCode) text)
                        :value (xml1-> v (tag= :Value) text)
                        :name (xml1-> v (tag= :Name) text)})
-        parse-decimal #(.parse (DecimalFormat. "0.#") %)
+        decimal-format (DecimalFormatSymbols/getInstance
+                         (Locale/forLanguageTag "ru-RU"))
+        parse-decimal #(.parse (DecimalFormat. "0.#" decimal-format) %)
         value->decimal #(update % :value parse-decimal)]
     (->> zipper
          iter-zip
