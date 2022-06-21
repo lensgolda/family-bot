@@ -1,9 +1,8 @@
 (ns family.bot.services.scheduling.rates
   (:require [immutant.scheduling :as sch]
             [integrant.core :as ig]
-            [family.bot
-             [providers.rates :as rates]
-             [services.messaging.telegram :as telegram]]))
+            [family.bot.providers.rates :as rates]
+            [family.bot.services.messaging.telegram :as telegram]))
 
 (def ^:private JOB-ID :exchange-rates-scheduler)
 

@@ -1,9 +1,8 @@
 (ns family.bot.services.scheduling.weather
   (:require [integrant.core :as ig]
             [immutant.scheduling :as sch]
-            [family.bot
-             [providers.weather :as weather]
-             [services.messaging.telegram :as telegram]]))
+            [family.bot.providers.weather :as weather]
+            [family.bot.services.messaging.telegram :as telegram]))
 
 
 (def ^:private JOB-ID :weather-fetching-scheduler)

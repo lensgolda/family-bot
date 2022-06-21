@@ -2,9 +2,8 @@
   (:require [clojure.core.async :refer [<!! thread]]
             [integrant.core :as ig]
             [jsonista.core :as j]
-            [family.bot
-             [providers.spec :as providers-spec]
-             [services.messaging.telegram :as telegram]]))
+            [family.bot.providers.spec :as providers-spec]
+            [family.bot.services.messaging.telegram :as telegram]))
 
 
 (defn- fetch-rate

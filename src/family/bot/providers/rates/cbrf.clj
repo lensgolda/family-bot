@@ -5,9 +5,8 @@
             [clojure.zip :as zip]
             [integrant.core :as ig]
             [clojure.tools.logging :as log]
-            [family.bot
-             [providers.spec :as providers-spec]
-             [services.messaging.telegram :as telegram]])
+            [family.bot.providers.spec :as providers-spec]
+            [family.bot.services.messaging.telegram :as telegram])
   (:import (java.text DecimalFormat)))
 
 
