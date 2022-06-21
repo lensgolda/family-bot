@@ -11,6 +11,13 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      ACCUWEATHER_KEY: ${{ secrets.ACCUWEATHER_KEY }}
+      ACCUWEATHER_LOCATION: ${{ secrets.ACCUWEATHER_LOCATION }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+      WEATHER_API_KEY: ${{ secrets.WEATHER_API_KEY }}
+
     steps:
     - name: Checkout
       uses: actions/checkout@v3
