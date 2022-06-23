@@ -1,0 +1,26 @@
+{:family.bot.services.scheduling/rates         {:provider  #ig/ref :family.bot.providers.rates/cbrf
+                                                :messaging #ig/ref :family.bot.services.messaging/telegram
+                                                :schedule  #profile {:dev  {:in    [2 :seconds]
+                                                                            :every [10 :seconds]
+                                                                            :limit 1}
+                                                                     :prod {:every :day
+                                                                            :at    [9 :hours 10 :minutes 0 :seconds]}}}
+ :family.bot.services.scheduling/weather       {:provider  #ig/ref :family.bot.providers.weather/weather-api-com
+                                                :messaging #ig/ref :family.bot.services.messaging/telegram
+                                                :schedule  #profile {:dev  {:in    [2 :seconds]
+                                                                            :every [10 :seconds]
+                                                                            :limit 1}
+                                                                     :prod {:every :day
+                                                                            :at    [9 :hours 11 :minutes 0 :seconds]}}}
+ :family.bot.services.messaging/telegram       {:token    #env TELEGRAM_TOKEN
+                                                :chat-id  #env TELEGRAM_CHAT_ID
+                                                :base-url "https://api.telegram.org"}
+ :family.bot.providers.rates/cbrf              {:base-url   "http://www.cbr.ru/scripts/XML_daily.asp"
+                                                :currencies #{"EUR" "USD"}}
+ :family.bot.providers.rates/open-er-api-com   {:base-url   "https://open.er-api.com/v6/latest"
+                                                :currencies #{"EUR" "USD"}}
+ :family.bot.providers.weather/weather-api-com {:key      #env WEATHER_API_KEY
+                                                :base-url "http://api.weatherapi.com/v1/forecast.json?q=Kaliningrad&aqi=no"}
+ :family.bot.providers.weather/accuweather     {:key          #env ACCUWEATHER_KEY
+                                                :base-url     "http://dataservice.accuweather.com/forecasts/v1/daily"
+                                                :location-key #env ACCUWEATHER_LOCATION}}

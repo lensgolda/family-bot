@@ -17,7 +17,7 @@
                         str/lower-case
                         keyword
                         (or :prod))
-        config (aero/read-config "config/example.dev.edn" {:profile profile})]
+        config (aero/read-config "config/dev.edn" {:profile profile})]
     (ig/load-namespaces config
       [:family.bot.services.scheduling/rates :family.bot.services.scheduling/weather])
     (ig/init config
