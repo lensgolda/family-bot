@@ -9,11 +9,11 @@
 (def ^:private i18map->format
   {:temp_c "температура: %s\u2103\n"
    :wind_kph "ветер %s км/ч"
-   :wind_dir ", %s\n"
-   :humidity "влажность %s\u0025\n"
+   :wind_dir ", направление: %s\n"
+   :humidity "влажность %s%\u0025\n"
    :feelslike_c "ощущается как %s\u2103\n"
-   :precip_mm "осадки %sf мм\n"
-   :cloud "облачность %s\u0025\n"})
+   :precip_mm "осадки %s мм\n"
+   :cloud "облачность %s%\u0025\n"})
 
 (defn- raw->tidy
   [raw]
