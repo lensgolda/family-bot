@@ -1,14 +1,13 @@
 (ns family.bot.providers.rates.cbrf
   (:require [clojure.data.zip.xml :refer :all]
             [clojure.java.io :as io]
+            [clojure.tools.logging :as log]
             [clojure.xml :as xml]
             [clojure.zip :as zip]
-            [integrant.core :as ig]
-            [clojure.tools.logging :as log]
             [family.bot.providers.spec :as providers-spec]
-            [family.bot.services.messaging.telegram :as telegram]
-            [clojure.string :as str])
-  (:import (java.text DecimalFormat DecimalFormatSymbols)
+            [family.bot.services.messaging.telegram :as tg]
+            [integrant.core :as ig])
+  (:import (java.text DecimalFormat)
            (java.util Locale)))
 
 
@@ -23,23 +22,24 @@
   (let [zipper (-> (.getBytes data "windows-1251")
                    io/input-stream
                    xml/parse
-                   zip/xml-zip)
+                   zip/xml-zip
+                   iter-zip)
         valute? #(-> % zip/node :tag (= :Valute))
         valute->map (fn [v]
                       {:code (xml1-> v (tag= :CharCode) text)
                        :value (xml1-> v (tag= :Value) text)
                        :name (xml1-> v (tag= :Name) text)})
-        df (DecimalFormat.)
+        df (DecimalFormat/getInstance
+             (Locale/forLanguageTag "ru-RU"))
         parse-decimal #(.parse df %)
-        value->decimal #(update % :value parse-decimal)]
-    (doto (.getDecimalFormatSymbols df)
-      (.setDecimalSeparator (char \,))
-      (.setMonetaryDecimalSeparator (char \,)))
-    (->> zipper
-         iter-zip
-         (filter valute?)
-         (map valute->map)
-         (map value->decimal))))
+        format-decimal #(.format df %)
+        value->decimal-str #(update % :value (comp format-decimal parse-decimal))
+        process-valute (comp
+                         (filter valute?)
+                         (map valute->map)
+                         (map value->decimal-str))]
+    (.setMaximumFractionDigits df 2)
+    (transduce process-valute conj [] zipper)))
 
 (defn- fetch-rates*
   [{:keys [currencies base-url]}]
@@ -60,7 +60,7 @@
         :let [k1 (-> r :code keyword)
               k2 (keyword "RUB")
               v (:value r)]]
-    (format "\uD83D\uDCB1 %s %.2f %s\n" (telegram/emoji k1) v (telegram/emoji k2))))
+    (format "\uD83D\uDCB1 %s %s %s\n" (tg/emoji k1) v (tg/emoji k2))))
 
 (defn- format-rates
   [rates]
