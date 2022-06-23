@@ -1,9 +1,10 @@
 (ns family.bot.providers.weather.weather-api-com
-  (:require [integrant.core :as ig]
-            [jsonista.core :as j]
+  (:require [clojure.tools.logging :as log]
             [family.bot.providers.spec :as providers-spec]
-            [clojure.tools.logging :as log]
-            [clojure.string :as str]))
+            [integrant.core :as ig]
+            [jsonista.core :as j])
+  (:import (java.text DecimalFormat)
+           (java.util Locale)))
 
 (def ^:private i18map->format
   {:temp_c "температура: %.1f\u2103\n"
@@ -40,12 +41,21 @@
     (catch Exception e
       (log/error e "error fetching weather"))))
 
+(defn- number->decimal-str
+  [^Number number]
+  (let [df (DecimalFormat/getInstance (Locale/forLanguageTag "ru-RU"))]
+    (.setMaximumFractionDigits df 2)
+    (.format df number)))
+
 (defn- current-map->strings
   [current]
   (for [[k v] current
-        :let [fkey (get i18map->format k "%s")]
+        :let [fkey (get i18map->format k "%s")
+              fval (if (number? v)
+                     (number->decimal-str v)
+                     (str v))]
         :when (some? v)]
-    (format fkey v)))
+    (format fkey fval)))
 
 (defn- format-current
   [current]
