@@ -30,8 +30,8 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y rlwrap
     - name: Check cURL
       run: curl --help
-    - name: Search clojure
-      run: sudo apt search clojure
+    - name: Install brew
+      run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 #    - name: Setup clojure
 #      uses: DeLaGuardo/setup-clojure@7.0
 #      with:
