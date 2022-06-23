@@ -28,16 +28,20 @@ jobs:
         java-version: '17'
     - name: Install rlwrap for clojure CLI
       run: sudo apt-get update && sudo apt-get install -y rlwrap
-    - name: Setup clojure
-      uses: DeLaGuardo/setup-clojure@7.0
-      with:
-        cli: latest
-    - name: Check CLI tools
-      run: clj --version
-    - name: Install dependencies
-      run: clj -P
-    - name: Clean target
-      run: clj -T:build clean
-    - name: Build uberjar
-      run: clj -T:build uber
-    - run: java -jar target/family-bot-standalone.jar clojure.main -m family.bot.core prod
+    - name: Check cURL
+      run: curl --help
+    - name: Search clojure
+      run: sudo apt search clojure
+#    - name: Setup clojure
+#      uses: DeLaGuardo/setup-clojure@7.0
+#      with:
+#        cli: latest
+#    - name: Check CLI tools
+#      run: clj --version
+#    - name: Install dependencies
+#      run: clj -P
+#    - name: Clean target
+#      run: clj -T:build clean
+#    - name: Build uberjar
+#      run: clj -T:build uber
+#    - run: java -jar target/family-bot-standalone.jar clojure.main -m family.bot.core prod
