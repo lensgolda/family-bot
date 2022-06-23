@@ -19,6 +19,10 @@
                         (or :prod))
         config (aero/read-config "config/dev.edn" {:profile profile})]
     (ig/load-namespaces config
-      [:family.bot.services.scheduling/rates :family.bot.services.scheduling/weather])
-    (ig/init config
-      [:family.bot.services.scheduling/rates :family.bot.services.scheduling/weather])))
+      [:family.bot.services.scheduling/rates
+       :family.bot.services.scheduling/weather])
+    (let [system (ig/init config
+                          [:family.bot.services.scheduling/rates
+                           :family.bot.services.scheduling/weather])]
+      (Thread/sleep (* 1000 10))
+      (ig/halt! system))))

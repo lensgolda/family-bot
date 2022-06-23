@@ -29,10 +29,6 @@ jobs:
         java-version: '17'
     - name: Install rlwrap for clojure CLI
       run: sudo apt-get update && sudo apt-get install -y rlwrap
-#    - name: Install brew
-#      run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
-#    - name: Install brew essential
-#      run: sudo apt-get install build-essential
     - name: Install clojure
       run: |
         pwd
@@ -46,10 +42,12 @@ jobs:
 #        cli: latest
     - name: Check CLI tools
       run: clj --version
-#    - name: Install dependencies
-#      run: clj -P
-#    - name: Clean target
-#      run: clj -T:build clean
-#    - name: Build uberjar
-#      run: clj -T:build uber
-#    - run: java -jar target/family-bot-standalone.jar clojure.main -m family.bot.core prod
+    - name: Copy config
+      run: cp ./config/example.dev.edn ./config/dev.edn
+    - name: Install dependencies
+      run: clj -P
+    - name: Clean target
+      run: clj -T:build clean
+    - name: Build uberjar
+      run: clj -T:build uber
+    - run: java -jar target/family-bot-standalone.jar clojure.main -m family.bot.core dev
