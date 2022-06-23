@@ -40,4 +40,4 @@ jobs:
       run: clj -T:build clean
     - name: Build uberjar
       run: clj -T:build uber
-    - run: java -jar target/family-bot-standalone.jar clojure.main -m family.bot.core dev
+    - run: java -jar target/family-bot-standalone.jar clojure.main -m family.bot.core prod
