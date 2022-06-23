@@ -3,12 +3,13 @@ name: Clojure CI
 on:
   push:
     branches: [ "actions" ]
-  pull_request:
-    branches: [ "actions" ]
+#  pull_request:
+#    branches: [ "actions" ]
+#  schedule:
+#    - cron: '10 9 * * 1-5'
 
 jobs:
   clojure:
-
     runs-on: ubuntu-latest
 
     env:
@@ -28,16 +29,23 @@ jobs:
         java-version: '17'
     - name: Install rlwrap for clojure CLI
       run: sudo apt-get update && sudo apt-get install -y rlwrap
-    - name: Check cURL
-      run: curl --help
-    - name: Install brew
-      run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+#    - name: Install brew
+#      run: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
+#    - name: Install brew essential
+#      run: sudo apt-get install build-essential
+    - name: Install clojure
+      run: |
+        pwd
+        curl -O https://download.clojure.org/install/linux-install-1.11.1.1149.sh
+        chmod +x linux-install-1.11.1.1149.sh
+        sudo ./linux-install-1.11.1.1149.sh
+        rm ./linux-install-1.11.1.1149.sh
 #    - name: Setup clojure
 #      uses: DeLaGuardo/setup-clojure@7.0
 #      with:
 #        cli: latest
-#    - name: Check CLI tools
-#      run: clj --version
+    - name: Check CLI tools
+      run: clj --version
 #    - name: Install dependencies
 #      run: clj -P
 #    - name: Clean target
