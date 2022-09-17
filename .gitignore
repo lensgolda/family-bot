@@ -3,6 +3,8 @@
 .env
 .nrepl-port
 *.iml
+.DS_Store
+.clj-kondo
 /config/*.edn
 !/config/example.dev.
 /target
