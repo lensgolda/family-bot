@@ -27,4 +27,9 @@
                                   "-Dlog4j.configurationFile=resources/log4j2.properties"]}
            :build  {:paths      ["build" "resources"]
                     :deps       {io.github.clojure/tools.build {:git/tag "v0.8.2" :git/sha "ba1a2bf"}}
-                    :ns-default build}}}
+                    :ns-default build}
+           :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "2.2.999"}
+                                   ; suppress logger output before checking deps
+                                   org.slf4j/slf4j-nop {:mvn/version "2.0.6"}}
+                      :main-opts ["-m" "antq.core" "--no-diff"
+                                  "--exclude=org.clojure/core.async"]}}}
