@@ -6,6 +6,6 @@
   [_]
   ::providers-spec/accuweather-provider-config)
 
-(defmethod ig/init-key :family.bot.providers.weather/accuweather
+(defmethod ig/init-key ::weather
   [_ config]
   config)

@@ -4,7 +4,10 @@
             [integrant.core :as ig]
             [jsonista.core :as j])
   (:import (java.text DecimalFormat)
-           (java.util Locale)))
+           (java.util Locale)
+           (family.bot.providers.weather WeatherFetching)
+           (java.time LocalDateTime)
+           (java.time.format DateTimeFormatter)))
 
 (def ^:private i18map->format
   {:temp_c "температура: %s\u2103\n"
@@ -21,13 +24,11 @@
         dayly (get-in forecast [:forecastday 0])
         keys-common [:temp_c :wind_kph :wind_dir :humidity :feelslike_c :precip_mm :cloud]
         keys-for-day [:mintemp_c :maxtemp_c :condition :daily_chance_of_rain]
-        keys-for-hour (conj keys-common :time :is_day)
-        keys-for-location [:name :localtime :lat :lon]
-        hour-by-hour (some->> (:hour dayly)
-                              (map #(select-keys % keys-for-hour)))]
+        keys-for-hour (conj keys-common :time :is_day :will_it_rain :will_it_snow :condition)
+        keys-for-location [:name :localtime :lat :lon]]
     {:location (some-> (:location raw) (select-keys keys-for-location))
      :current (some-> (:current raw) (select-keys keys-common))
-     :by-hour hour-by-hour
+     :by-hour (some->> (:hour dayly) (map #(select-keys % keys-for-hour)))
      :day (some-> (:day dayly) (select-keys keys-for-day))}))
 
 (defn- fetch-weather*
@@ -40,6 +41,20 @@
       (raw->tidy resp))
     (catch Exception e
       (log/error e "error fetching weather"))))
+
+(defn- format-hour-time
+  "yyyy-MM-dd HH:mm -> HH:mm formatter"
+  [time-str]
+  (-> time-str
+      (LocalDateTime/parse (DateTimeFormatter/ofPattern "yyyy-MM-dd HH:mm"))
+      (.format (DateTimeFormatter/ofPattern "HH:mm"))))
+
+(defn- format-hour
+  [hour-forcast]
+  (-> hour-forcast
+      (select-keys [:time :temp_c])
+      (update :time format-hour-time)
+      ((juxt :time :temp_c))))
 
 (defn- number->decimal-str
   [^Number number]
@@ -63,20 +78,37 @@
     (current-map->strings $)
     (apply str "*Погода сейчас*:\n" $)))
 
-(defn- format-weather
+(defn- format-by-hour
+  [hour-forecast]
+  (->> hour-forecast 
+       (map (comp
+             (partial apply format "%s \\- %.0f\u2103\n")
+             format-hour))
+       (drop 8)
+       (apply str "*Почасовой прогноз:*\n")))
+
+#_(defn- format-weather
   [weather]
   (some-> weather :current format-current))
 
+(defn- format-weather
+  [weather]
+  (let [[current hour] (some-> weather
+                               (update :current format-current)
+                               (update :by-hour format-by-hour)
+                               ((juxt :current :by-hour)))]
+    (str current "\n\n" hour)))
+
 (defrecord WeatherApiCom []
-  family.bot.providers.weather/WeatherFetching
+  WeatherFetching
   (fetch-weather [this]
     (some-> (fetch-weather* this)
             (format-weather))))
 
-(defmethod ig/pre-init-spec :family.bot.providers.weather/weather-api-com
+(defmethod ig/pre-init-spec ::weather
   [_]
   ::providers-spec/weather-api-provider-config)
 
-(defmethod ig/init-key :family.bot.providers.weather/weather-api-com
+(defmethod ig/init-key ::weather
   [_ config]
   (map->WeatherApiCom config))

@@ -40,10 +40,10 @@
     (some-> (fetch-rates* this)
             (format-rates))))
 
-(defmethod ig/pre-init-spec :family.bot.providers.rates/open-er-api-com
+(defmethod ig/pre-init-spec ::rates
   [_]
   ::providers-spec/rates-provider)
 
-(defmethod ig/init-key :family.bot.providers.rates/open-er-api-com
+(defmethod ig/init-key ::rates
   [_ config]
   (map->OpenErApiCom config))

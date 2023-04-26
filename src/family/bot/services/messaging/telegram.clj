@@ -18,7 +18,7 @@
 (defrecord Telegram []
   Messaging
   (send-message [{:keys [base-url token chat-id]} message]
-    (let [url (format "%s/%s/%s" base-url token METHOD-SEND-MESSAGE)
+    (let [url (format "%s/bot%s/%s" base-url token METHOD-SEND-MESSAGE)
           body (j/write-value-as-string
                  {:chat_id chat-id
                   :text message
@@ -40,6 +40,6 @@
   [<messaging> message]
   (send-message <messaging> message))
 
-(defmethod ig/init-key :family.bot.services.messaging/telegram
+(defmethod ig/init-key ::telegram
   [_ config]
   (map->Telegram config))
