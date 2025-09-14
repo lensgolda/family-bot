@@ -25,4 +25,5 @@
                           [:family.bot.services.scheduling/rates
                            :family.bot.services.scheduling/weather])]
       (Thread/sleep (* 1000 10))
-      (ig/halt! system))))
+      (.addShutdownHook (Runtime/getRuntime)
+                    (Thread. #(ig/halt! system))))))
